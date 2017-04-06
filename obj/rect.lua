@@ -17,11 +17,28 @@ function Rect:new(x, y, width, height)
   }
 end
 
+function Rect:getSize()
+  return self.width, self.height
+end
+
+function Rect:getPosition()
+  return self.x, self.y
+end
+
 function Rect:set(x, y, width, height)
   self.x = x or self.x
   self.y = y or self.y
   self.width = width or self.width
   self.height = height or self.height
+end
+
+function Rect:clone(dest)
+  dest = dest or Rect()
+  dest.x = self.x
+  dest.y = self.y
+  dest.width = self.width
+  dest.height = self.height
+  return dest
 end
 
 function Rect:top(v)
@@ -52,6 +69,29 @@ end
 function Rect:middleY(v)
   if v then y = v - self.height / 2 end
   return self.y + self.height / 2
+end
+
+function Rect:merge(r)
+  local x  = math.min(self:left(), r:left())
+  local y  = math.min(self:top(), r:top())
+  local x1 = math.max(self:right(), r:right())
+  local y1 = math.max(self:bottom(), r:bottom())
+  self.x, self.y = x, y
+  self.width = math.max(0, x1 - x)
+  self.height = math.max(0, y1 - y)
+  return self
+end
+
+function Rect:expand(a)
+  if a > 0 then
+    self.x = self.x - a
+    self.y = self.y - a
+    self.width = self.width + a * 2
+    self.height = self.height + a * 2
+  end
+  self.width = math.max(0, self.width)
+  self.height = math.max(0, self.height)
+  return self
 end
 
 function Rect:overlapsX(r)

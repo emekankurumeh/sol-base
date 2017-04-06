@@ -33,5 +33,5 @@ Color = {
 return {
   title = G.title,
   width = G.width,
-  height = G.height
+  height = G.height,
 }
