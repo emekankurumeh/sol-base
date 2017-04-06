@@ -1,6 +1,7 @@
 local Game = require "lib.classic"
 local _ = require "lib.lume"
 local Rect = require "obj.rect"
+local Color = require "obj.color"
 
 function Game:new()
   error("use Game.init() instead")
@@ -18,7 +19,6 @@ end
 
 function Game.update(dt)
   require("lib.stalker").update()
-  Gs:set(sol.mouse.getPosition())
   collectgarbage()
   collectgarbage()
 end
