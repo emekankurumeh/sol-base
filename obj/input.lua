@@ -14,12 +14,12 @@ function Input.register(id, keys)
   Input.map[id] = _.clone(keys)
 end
 
-function Input.isDown(id)
+function Input.isDown(id, fn)
   assert(Input.map[id], "bad id")
   return sol.keyboard.isDown(unpack(Input.map[id]))
 end
 
-function Input.wasPressed(id)
+function Input.wasPressed(id, fn)
   assert(Input.map[id], "bad id")
   return sol.keyboard.wasPressed(unpack(Input.map[id]))
 end

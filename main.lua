@@ -10,9 +10,13 @@ function sol.onLoad()
     ["down"]    = {"down", "s"},
     ["jump"]    = {"space", "x"},
     ["select"]  = {"return", "space", "x", "c"},
-    ["pause"]   = {"escape", "p"},
+    ["pause"]   = {"p"},
     ["action"]  = {"c"},
     ["mute"]    = {"m"},
+    ["quit"]    = {"escape"},
+    ["debug"]   = {"`"},
+    ["console"] = {"tab"},
+    ["restart"] = {"r"},
   })
 end
 

@@ -1,7 +1,10 @@
-local Game = require "lib.classic"
 local _ = require "lib.lume"
+local log = require "lib.log"
+
+local Game = require "lib.classic"
 local Rect = require "obj.rect"
 local Color = require "obj.color"
+local Input = require "obj.input"
 
 function Game:new()
   error("use Game.init() instead")
@@ -15,10 +18,31 @@ function Game.init(width, height, color)
 
   Game.framebuffer = sol.Buffer.fromBlank(G.width, G.height)
   Game.postbuffer = Game.framebuffer:clone()
+
+  log.usecolor = false
+  log.outfile = "debug/out.log"
 end
 
 function Game.update(dt)
   require("lib.stalker").update()
+
+  -- handle normal keyboard input
+  if Input.wasPressed("quit") then
+    sol.system.quit()
+  elseif Input.wasPressed("debug") then
+    local mode = not sol.debug.getVisible()
+    G.debug = mode
+    sol.debug.clear()
+    sol.debug.setVisible(G.debug and mode)
+    log.trace(mode and "debug mode activated" or "debug mode deactivated")
+  elseif G.debug == true and Input.wasPressed("console") then
+    local mode = not sol.debug.getFocused()
+    sol.debug.setFocused(G.debug and mode)
+  elseif G.debug and Input.wasPressed("restart") then
+    sol.onLoad()
+    log.trace("game state restarted")
+  end
+
   collectgarbage()
   collectgarbage()
 end
@@ -27,23 +51,12 @@ function Game.draw()
   Game.postbuffer = Game.framebuffer:clone()
   Game.framebuffer:clear(unpack(Game.bgcolor))
   Game.framebuffer:reset()
-  -- do drawing of members
+  -- do drawing of framebuffer
   sol.graphics.copyPixels(Game.framebuffer, 0, 0)
 end
 
 function Game.key(key, char)
-  if key == "tab" then
-    local mode = not sol.debug.getVisible()
-    sol.debug.setVisible(G.debug and mode)
-  elseif key == "`" then
-    local mode = not sol.debug.getFocused()
-    sol.debug.setFocused(G.debug and mode)
-  elseif key == "escape" then
-    sol.onQuit()
-    os.exit()
-  elseif key == "r" and G.debug then
-    sol.onLoad()
-  end
+  
 end
 
 return Game

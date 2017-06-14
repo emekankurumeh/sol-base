@@ -6,7 +6,7 @@ G = {
   width = 512,
   height = 512,
   scale = 8,
-  debug = true,
+  debug = false,
 }
 
 return {
